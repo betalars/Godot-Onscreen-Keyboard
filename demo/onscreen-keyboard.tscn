@@ -1,0 +1,93 @@
+[gd_scene load_steps=4 format=3 uid="uid://c53taxqtuckhv"]
+
+[ext_resource type="Script" path="res://addons/onscreenkeyboard/onscreen_keyboard.gd" id="1_punmr"]
+
+[sub_resource type="GDScript" id="GDScript_a4pmt"]
+script/source = "extends Button
+
+func _ready() -> void:
+	grab_focus()
+
+func _on_focus_exited():
+	text = \"I no longer have the focus.\"
+	
+func _on_focus_entered():
+	text = \"I have the focus.\"
+"
+
+[sub_resource type="GDScript" id="GDScript_1kwt8"]
+script/source = "extends TextEdit
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event is InputEventAction:
+		if event.is_action_pressed(\"get_attention\"):
+			grab_focus()
+"
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -206.0
+offset_top = -202.5
+offset_right = 206.0
+offset_bottom = -157.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "I have the focus."
+script = SubResource("GDScript_a4pmt")
+
+[node name="TextEdit" type="TextEdit" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -237.5
+offset_top = -145.0
+offset_right = 237.5
+offset_bottom = -97.0
+grow_horizontal = 2
+grow_vertical = 2
+placeholder_text = "You can put me in focus using down"
+
+[node name="TextEdit2" type="TextEdit" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -237.5
+offset_top = -88.5
+offset_right = 237.5
+offset_bottom = -37.5
+grow_horizontal = 2
+grow_vertical = 2
+placeholder_text = "I will grab focus when you press X (keyboard or controller)"
+script = SubResource("GDScript_1kwt8")
+
+[node name="OnscreenKeyboard" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 355.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_punmr")
+
+[connection signal="focus_entered" from="Button" to="Button" method="_on_focus_entered"]
+[connection signal="focus_exited" from="Button" to="Button" method="_on_focus_exited"]
